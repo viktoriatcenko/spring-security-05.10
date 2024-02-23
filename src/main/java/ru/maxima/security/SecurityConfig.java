@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -25,7 +26,8 @@ public class SecurityConfig {
     }
 
     protected void configure(AuthenticationManagerBuilder managerBuilder) throws Exception {
-        managerBuilder.userDetailsService(personDetailsService);
+        managerBuilder.userDetailsService(personDetailsService)
+                .passwordEncoder(getPasswordEncoder());
     }
 
     @Bean
@@ -37,12 +39,15 @@ public class SecurityConfig {
                 .formLogin((s) -> s.loginPage("/auth/login")
                         .loginProcessingUrl("/process_login")
                         .defaultSuccessUrl("/hello", true)
-                        .failureUrl("/auth/login?error"));
+                        .failureUrl("/auth/login?error"))
+                .logout((s) -> s.logoutUrl("/logout")
+                        .logoutSuccessUrl("/auth/login"));
+
         return http.build();
     }
 
     @Bean
     public PasswordEncoder getPasswordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
+        return new BCryptPasswordEncoder();
     }
 }

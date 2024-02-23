@@ -34,6 +34,6 @@ public class PersonValidator implements Validator {
             return;
         }
 
-        errors.rejectValue("username", "100", "User with this nickname existed");
+        errors.rejectValue("name", "", "User with this nickname existed");
     }
 }

@@ -1,6 +1,7 @@
 package ru.maxima.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.maxima.models.Person;
 import ru.maxima.repositories.PeopleRepository;
@@ -18,7 +19,5 @@ public class PersonService {
         return peopleRepository.findByName(name);
     }
 
-    public void save(Person person) {
-        peopleRepository.save(person);
-    }
+
 }
